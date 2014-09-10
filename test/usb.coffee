@@ -34,14 +34,14 @@ describe 'findByIds', ->
 	it 'should return an array with length > 0', ->
 		dev = usb.findByIds(0x59e3, 0x0a23)
 		assert.ok(dev, "Demo device is not attached")
-		
+
 
 describe 'Device', ->
 	device = null
 	before ->
 		device = usb.findByIds(0x59e3, 0x0a23)
 
-	it 'should have sane properties', ->	
+	it 'should have sane properties', ->
 		assert.ok((device.busNumber > 0), "deviceAddress must be larger than 0")
 		assert.ok((device.deviceAddress > 0), "deviceAddress must be larger than 0")
 
@@ -104,7 +104,7 @@ describe 'Device', ->
 				assert.throws -> iface.attachKernelDriver()
 
 		it 'should be able to claim an interface', ->
-			iface.claim()	
+			iface.claim()
 
 		describe 'IN endpoint', ->
 			inEndpoint = null
@@ -140,22 +140,22 @@ describe 'Device', ->
 
 			it 'should be a readableStream', (done) ->
 				pkts = 0
-		
+
 				inEndpoint.startStream 8, 64
 				inEndpoint.on 'data', (d) ->
 					assert.equal d.length, 64
 					pkts++
-					
+
 					if pkts == 100
 						inEndpoint.stopStream()
-						
+
 				inEndpoint.on 'error', (e) ->
 					throw e
-						
+
 				inEndpoint.on 'end', ->
 					#console.log("Stream stopped")
 					done()
-				
+
 
 		describe 'OUT endpoint', ->
 			outEndpoint = null
@@ -174,26 +174,6 @@ describe 'Device', ->
 			it 'should support write', (done) ->
 				outEndpoint.transfer [1,2,3,4], (e) ->
 					assert.ok(e == undefined, e)
-					done()
-
-			it 'should be a writableStream', (done)->
-				pkts = 0
-
-				outEndpoint.startStream 4, 64
-				outEndpoint.on 'drain', ->
-					pkts++
-
-					outEndpoint.write(new Buffer(64));
-
-					if pkts == 100
-						outEndpoint.stopStream()
-						#console.log("Stopping stream")
-
-				outEndpoint.on 'error', (e) ->
-					#console.log("Stream error", e)
-
-				outEndpoint.on 'end', ->
-					#console.log("Stream stopped")
 					done()
 
 		after (cb) ->
