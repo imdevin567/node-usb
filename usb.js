@@ -219,7 +219,7 @@ Endpoint.prototype.makeTransfer = function(timeout, callback){
 }
 
 Endpoint.prototype.startStream = function(nTransfers, transferSize, callback){
-	if (this.streamTransfers){
+	if (this.streamActive){
 		throw new Error("Stream already active")
 	}
 
@@ -236,7 +236,7 @@ Endpoint.prototype.startStream = function(nTransfers, transferSize, callback){
 }
 
 Endpoint.prototype.stopStream = function(){
-	if (!this.streamTransfers) {
+	if (!this.streamActive) {
 		throw new Error('Stream is not active.');
 	}
 	for (var i=0; i<this.streamTransfers.length; i++){
